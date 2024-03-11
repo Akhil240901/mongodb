@@ -107,3 +107,16 @@ const updateDocument=async (_id)=>{
     }
 }
 //updateDocument("65e9b377804952c92603ece4");
+
+//delete thedocument
+
+const deleteDocument=async (_id)=>{
+    try{
+        const result=await Playlist.findByIdAndDelete({_id});
+
+        console.log(result);
+    }catch(err){
+        console.log(err)
+    }
+}
+deleteDocument("65e9b377804952c92603ece4");
