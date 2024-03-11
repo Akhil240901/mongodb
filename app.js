@@ -81,7 +81,7 @@ const firstDocument= async()=>{
 
 //firstDocument();
 
-const getData=async ()=>{
+const getDocument=async ()=>{
     try{
     const result=await Playlist.find().limit().select({name:1}).sort({name:1});
     console.log(result);
@@ -89,4 +89,21 @@ const getData=async ()=>{
         console.log(err);
     }
 }
-getData();
+//getDocument();
+
+
+//update the document
+const updateDocument=async (_id)=>{
+    try{
+        const result=await Playlist.findByIdAndUpdate({_id},{
+            $set:{
+                name:"REACT"
+            }
+        })
+
+        console.log(result)
+    }catch(err){
+        console.log(err);
+    }
+}
+//updateDocument("65e9b377804952c92603ece4");
