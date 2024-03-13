@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-
+const validator=require('validator');
 //connection creation and creating new database
 mongoose.connect("mongodb://localhost:27017/akhil_store")
 .then(()=>console.log("connection is successsful...")
@@ -13,11 +13,29 @@ const playlistSchema=new mongoose.Schema({
     name:{
         type:String,
         required:true,
+        uppercase:true,
+        minlength:2,
+        maxlength:30,
     },
     ctype:String,
-    videos:Number,
+    videos:{
+        type:Number,
+        validate(value){
+            if(value<0){
+                throw new Error("Enter valid number count of videos");
+            }
+        }
+    },
     author:String,
     active:Boolean,
+    gmail:{
+        type:String,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error("Type proper structure of gmail")
+            }
+        }
+    },
     date:{
         type:Date,
         default:Date.now
@@ -34,52 +52,24 @@ const Playlist=new mongoose.model("Playlist",playlistSchema);
 //create document or insert
 const firstDocument= async()=>{
     try{
-        const reactPlaylist=new Playlist({
-            name:"react js",
-            ctype:"front End",
-            videos:50,
-            author:"Akhil Bisen",
-            active:true
-        })
-
-        const mongoPlaylist=new Playlist({
-            name:"mongodb",
+        
+        const javaPlaylist=new Playlist({
+            name:"sql",
             ctype:"database",
-            videos:56,
+            videos:4,
             author:"Akhil Bisen",
+            gmail:"akhilbi@123.com",
             active:true
         })
 
-        const nodePlaylist=new Playlist({
-            name:"node js",
-            ctype:"back End",
-            videos:485,
-            author:"Akhil Bisen",
-            active:true
-        })
-        const mongoosePlaylist=new Playlist({
-            name:"mongoose",
-            ctype:"database",
-            videos:50,
-            author:"Akhil Bisen",
-            active:true
-        })
-        const expressPlaylist=new Playlist({
-            name:"express js",
-            ctype:"back end",
-            videos:50,
-            author:"Akhil Bisen",
-            active:true
-        })
-
-        const result=await Playlist.insertMany([expressPlaylist,reactPlaylist,mongoosePlaylist,nodePlaylist,mongoPlaylist]);
+        const result=await Playlist.insertMany([javaPlaylist]);
         console.log(result);
     }catch(err){
        console.log(err);
     }
 }
 
-//firstDocument();
+firstDocument();
 
 const getDocument=async ()=>{
     try{
@@ -119,4 +109,4 @@ const deleteDocument=async (_id)=>{
         console.log(err)
     }
 }
-deleteDocument("65e9b377804952c92603ece4");
+//deleteDocument("65e9b377804952c92603ece4");
